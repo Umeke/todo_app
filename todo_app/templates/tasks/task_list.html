@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            padding: 20px;
+        }
+        .task {
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .completed {
+            text-decoration: line-through;
+            color: #888;
+        }
+        a {
+            margin-left: 10px;
+            text-decoration: none;
+            color: #007bff;
+        }
+        button {
+            background: none;
+            border: none;
+            color: #007bff;
+            cursor: pointer;
+        }
+        button:hover {
+            text-decoration: underline;
+        }
+        .add-task {
+            margin-top: 20px;
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Task List</h1>
+    <ul>
+        {% for task in tasks %}
+            <li class="task {% if task.status %}completed{% endif %}">
+                <span>{{ task.title }}</span>
+                <div>
+                    <a href="{% url 'task_detail' task.pk %}">Details</a>
+                    <a href="{% url 'task_update' task.pk %}">Edit</a>
+                    <a href="{% url 'task_delete' task.pk %}">Delete</a>
+                    <form action="{% url 'toggle_task_status' task.pk %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit">
+                            {% if task.status %}Uncomplete{% else %}Complete{% endif %}
+                        </button>
+                    </form>
+                </div>
+            </li>
+        {% empty %}
+            <li>No tasks available.</li>
+        {% endfor %}
+    </ul>
+    <a class="add-task" href="{% url 'task_create' %}">Add New Task</a>
+</body>
+</html>

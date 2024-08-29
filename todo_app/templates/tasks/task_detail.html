@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Detail</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .task-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            margin-top: 20px;
+        }
+
+        .task-container h2 {
+            margin-top: 0;
+            color: #4CAF50;
+        }
+
+        .task-detail p {
+            margin: 10px 0;
+            color: #555;
+        }
+
+        .task-detail p strong {
+            color: #333;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            color: white;
+            background-color: #4CAF50;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .btn-secondary {
+            background-color: #f44336;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e53935;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Task Details</h1>
+
+    <div class="task-container">
+        <h2>{{ task.title }}</h2>
+        <div class="task-detail">
+            <p><strong>Description:</strong> {{ task.description }}</p>
+            <p><strong>Status:</strong> {{ task.get_status_display }}</p>
+            <p><strong>Created At:</strong> {{ task.created_at|date:"F j, Y, g:i a" }}</p>
+            <p><strong>Updated At:</strong> {{ task.updated_at|date:"F j, Y, g:i a" }}</p>
+        </div>
+
+        <div class="actions">
+            <a href="{% url 'task_update' task.pk %}" class="btn">Edit</a>
+            <a href="{% url 'task_delete' task.pk %}" class="btn btn-secondary">Delete</a>
+            <a href="{% url 'task_list' %}" class="btn">Back to Task List</a>
+        </div>
+    </div>
+
+</body>
+</html>
