@@ -46,6 +46,10 @@ def test_view(request):
 
 # Create your views here.
 # View for listing tasks
+from django.views.generic import ListView
+from .models import Task
+
+
 class TaskListView(ListView):
     model = Task
     template_name = 'tasks/task_list.html'
@@ -57,19 +61,25 @@ class TaskListView(ListView):
         status = self.request.GET.get('status')
         sort_by = self.request.GET.get('sort_by')
 
+        # Filter by status
         if status:
             if status == 'completed':
                 queryset = queryset.filter(status=True)
             elif status == 'incomplete':
                 queryset = queryset.filter(status=False)
 
+        # Sort by sort_by parameter
         if sort_by:
             if sort_by == 'date_created':
                 queryset = queryset.order_by('created_at')
             elif sort_by == 'status':
                 queryset = queryset.order_by('status')
 
+        # Ensure tasks are only visible to the logged-in user
+        queryset = queryset.filter(user=self.request.user)
+
         return queryset
+
 
 # View for displaying task details
 class TaskDetailView(DetailView):
@@ -110,3 +120,7 @@ class ToggleTaskStatusView(View):
         task.status = not task.status
         task.save()
         return redirect('task_list')
+
+
+
+
