@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '91.243.71.22']
 
-
+#ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -83,6 +83,7 @@ DATABASES = {
         'USER': 'todo_user',
         'PASSWORD': '1234',
         'HOST': 'localhost',
+        #'PORT': '5432',
         'PORT': '8081',
     }
 }
