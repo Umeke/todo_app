@@ -121,7 +121,7 @@ class ToggleTaskStatusView(View):
         task.save()
         return redirect('task_list')
 
-# test
+# test bot
 from rest_framework import viewsets
 from .models import Task
 from .serializers import TaskSerializer
@@ -129,4 +129,19 @@ from .serializers import TaskSerializer
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+
+
+from django.http import JsonResponse
+from django.contrib.auth import authenticate
+
+def authenticate_user(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            return JsonResponse({'status': 'success', 'user_id': user.id})
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Invalid credentials'})
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
 

@@ -3,10 +3,12 @@ from django.urls import path
 from .views import *
 from rest_framework.routers import DefaultRouter
 from .views import TaskViewSet
+from django.urls import path
 
 router = DefaultRouter()
 router.register(r'tasks', TaskViewSet)
 urlpatterns = [
+    path('api/authenticate/', authenticate_user, name='authenticate_user'),
     path('register/', register_view, name='register'),
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
