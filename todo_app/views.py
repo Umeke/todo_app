@@ -133,15 +133,33 @@ class TaskViewSet(viewsets.ModelViewSet):
 
 from django.http import JsonResponse
 from django.contrib.auth import authenticate
+import requests
+from django.views.decorators.csrf import csrf_exempt
 
+
+@csrf_exempt
 def authenticate_user(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            return JsonResponse({'status': 'success', 'user_id': user.id})
+
+        # API URL
+        url = 'http://91.243.71.22:8001/api/authenticate/'
+
+        # Пайдаланушының аты мен құпия сөзі
+        payload = {
+            'username': username,
+            'password': password
+        }
+
+        # POST сұрау жіберу
+        response = requests.post(url, data=payload)
+
+        # Жауапты тексеру
+        if response.status_code == 200:
+            return JsonResponse({'status': 'success', 'data': response.json()})
         else:
-            return JsonResponse({'status': 'error', 'message': 'Invalid credentials'})
-    return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+            return JsonResponse({'status': 'error', 'message': response.text}, status=response.status_code)
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
 
